@@ -2688,6 +2688,7 @@ BoxParser.createSampleEntryCtor(BoxParser.SAMPLE_ENTRY_TYPE_VISUAL, "vp09");
 BoxParser.createSampleEntryCtor(BoxParser.SAMPLE_ENTRY_TYPE_AUDIO, 	"mp4a");
 BoxParser.createSampleEntryCtor(BoxParser.SAMPLE_ENTRY_TYPE_AUDIO, 	"ac-3");
 BoxParser.createSampleEntryCtor(BoxParser.SAMPLE_ENTRY_TYPE_AUDIO, 	"ec-3");
+BoxParser.createSampleEntryCtor(BoxParser.SAMPLE_ENTRY_TYPE_AUDIO, 	"opus");
 
 // Encrypted sample entries
 BoxParser.createEncryptedSampleEntryCtor(BoxParser.SAMPLE_ENTRY_TYPE_VISUAL, 	"encv");
@@ -5603,6 +5604,16 @@ BoxParser.sidxBox.prototype.write = function(stream) {
 	}
 }
 
+// file:src/writing/smhd.js
+BoxParser.smhdBox.prototype.write = function(stream) {
+  var i;
+  this.version = 0;
+  this.flags = 1;
+  this.size = 4;
+  this.writeHeader(stream);
+  stream.writeUint16(this.balance);
+  stream.writeUint16(0);
+}
 // file:src/writing/stco.js
 BoxParser.stcoBox.prototype.write = function(stream) {
 	this.version = 0;
@@ -6958,8 +6969,8 @@ ISOFile.prototype.addTrack = function (_options) {
 					.set("alternate_group", 0)
 					.set("volume", 1)
 					.set("matrix", [ 0, 0, 0, 0, 0, 0, 0, 0, 0 ])
-					.set("width", options.width)
-					.set("height", options.height);
+					.set("width", options.width << 16)
+					.set("height", options.height << 16);
 
 	var mdia = trak.add("mdia");
 	mdia.add("mdhd").set("creation_time", 0)
