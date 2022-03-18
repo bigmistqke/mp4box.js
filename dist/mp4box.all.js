@@ -2688,7 +2688,7 @@ BoxParser.createSampleEntryCtor(BoxParser.SAMPLE_ENTRY_TYPE_VISUAL, "vp09");
 BoxParser.createSampleEntryCtor(BoxParser.SAMPLE_ENTRY_TYPE_AUDIO, 	"mp4a");
 BoxParser.createSampleEntryCtor(BoxParser.SAMPLE_ENTRY_TYPE_AUDIO, 	"ac-3");
 BoxParser.createSampleEntryCtor(BoxParser.SAMPLE_ENTRY_TYPE_AUDIO, 	"ec-3");
-BoxParser.createSampleEntryCtor(BoxParser.SAMPLE_ENTRY_TYPE_AUDIO, 	"opus");
+BoxParser.createSampleEntryCtor(BoxParser.SAMPLE_ENTRY_TYPE_AUDIO, 	"Opus");
 
 // Encrypted sample entries
 BoxParser.createEncryptedSampleEntryCtor(BoxParser.SAMPLE_ENTRY_TYPE_VISUAL, 	"encv");
@@ -3001,6 +3001,24 @@ BoxParser.createBoxCtor("dmax", function(stream) {
 // file:src/parsing/dmed.js
 BoxParser.createBoxCtor("dmed", function(stream) {
 	this.bytessent = stream.readUint64();
+});
+
+// file:src/parsing/dOps.js
+BoxParser.createBoxCtor("dOps", function(stream) {
+	this.Version = stream.readUint8();
+	this.OutputChannelCount = stream.readUint8();
+	this.PreSkip = stream.readUint16();
+	this.InputSampleRate = stream.readUint32();
+	this.OutputGain = stream.readInt16();
+	this.ChannelMappingFamily = stream.readUint8();
+	if (this.ChannelMappingFamily !== 0) {
+		this.StreamCount = stream.readUint8();
+		this.CoupledCount = stream.readUint8();
+		this.ChannelMapping = [];
+		for (var i = 0; i < this.OutputChannelCount; i++) {
+			this.ChannelMapping[i] = stream.readUint8();
+		}
+	}
 });
 
 // file:src/parsing/dref.js
