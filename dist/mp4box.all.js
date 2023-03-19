@@ -6614,6 +6614,17 @@ ISOFile.prototype.getInfo = function() {
 	return movie;
 }
 
+ISOFile.prototype.setNextSeekPositionFromSample = function (sample) {
+	if (!sample) {
+		return;
+	}
+	if (this.nextSeekPosition) {
+		this.nextSeekPosition = Math.min(sample.offset+sample.alreadyRead,this.nextSeekPosition);
+	} else {
+		this.nextSeekPosition = sample.offset+sample.alreadyRead;
+	}
+}
+
 ISOFile.prototype.processSamples = function(last) {
 	var i;
 	var trak;
@@ -6670,6 +6681,7 @@ ISOFile.prototype.processSamples = function(last) {
 					trak.nextSample++;
 					extractTrak.samples.push(sample);
 				} else {
+					this.setNextSeekPositionFromSample(trak.samples[trak.nextSample]);
 					break;
 				}
 				if (trak.nextSample % extractTrak.nb_samples === 0 || trak.nextSample >= trak.samples.length) {
@@ -8109,12 +8121,7 @@ ISOFile.prototype.createFragment = function(track_id, sampleNumber, stream_) {
 	var trak = this.getTrackById(track_id);
 	var sample = this.getSample(trak, sampleNumber);
 	if (sample == null) {
-		sample = trak.samples[sampleNumber];
-		if (this.nextSeekPosition) {
-			this.nextSeekPosition = Math.min(sample.offset+sample.alreadyRead,this.nextSeekPosition);
-		} else {
-			this.nextSeekPosition = trak.samples[sampleNumber].offset+sample.alreadyRead;
-		}
+		this.setNextSeekPositionFromSample(trak.samples[sampleNumber]);
 		return null;
 	}
 	
