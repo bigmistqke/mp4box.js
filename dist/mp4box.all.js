@@ -2192,7 +2192,8 @@ var BoxParser = {
 		[ "udta", ["kind"] ],
 		[ "iprp", ["ipma"] ],
 		[ "ipco" ],
-		[ "grpl" ]
+		[ "grpl" ],
+		[ "etyp", [ "tyco"] ]
 	],
 	// Boxes effectively created
 	boxCodes : [],
@@ -4739,6 +4740,15 @@ BoxParser.createFullBoxCtor("tsel", function(stream) {
 // file:src/parsing/txtC.js
 BoxParser.createFullBoxCtor("txtC", function(stream) {
 	this.config = stream.readCString();
+});
+
+// file:src/parsing/tyco.js
+BoxParser.createBoxCtor("tyco", function(stream) {
+	var count = (this.size - this.hdr_size) / 4;
+	this.compatible_brands = [];
+	for (var i = 0; i < count; i++) {
+		this.compatible_brands[i] = stream.readString(4);
+	}
 });
 
 // file:src/parsing/uncC.js
