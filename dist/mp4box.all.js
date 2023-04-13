@@ -4173,7 +4173,8 @@ BoxParser.SingleItemTypeReferenceBox.prototype.parse = function(stream) {
 	var count =  stream.readUint16();
 	this.references = [];
 	for(var i = 0; i < count; i++) {
-		this.references[i] = stream.readUint16();
+		this.references[i] = {};
+		this.references[i].to_item_ID = stream.readUint16();
 	}
 }
 
@@ -4189,7 +4190,8 @@ BoxParser.SingleItemTypeReferenceBoxLarge.prototype.parse = function(stream) {
 	var count =  stream.readUint16();
 	this.references = [];
 	for(var i = 0; i < count; i++) {
-		this.references[i] = stream.readUint32();
+		this.references[i] = {};
+		this.references[i].to_item_ID = stream.readUint32();
 	}
 }
 
