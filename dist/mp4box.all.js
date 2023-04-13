@@ -4751,6 +4751,14 @@ BoxParser.createBoxCtor("tyco", function(stream) {
 	}
 });
 
+// file:src/parsing/udes.js
+BoxParser.createFullBoxCtor("udes", function(stream) {
+	this.lang = stream.readCString();
+	this.name = stream.readCString();
+	this.description = stream.readCString();
+	this.tags = stream.readCString();
+});
+
 // file:src/parsing/uncC.js
 BoxParser.createFullBoxCtor("uncC", function(stream) {
     var i;
