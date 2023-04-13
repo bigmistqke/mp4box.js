@@ -236,6 +236,7 @@ var BoxParser = {
 		[ "iprp", ["ipma"] ],
 		[ "ipco" ],
 		[ "grpl" ],
+		[ "j2kH" ],
 		[ "etyp", [ "tyco"] ]
 	],
 	// Boxes effectively created

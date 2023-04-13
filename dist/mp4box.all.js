@@ -2193,6 +2193,7 @@ var BoxParser = {
 		[ "iprp", ["ipma"] ],
 		[ "ipco" ],
 		[ "grpl" ],
+		[ "j2kH" ],
 		[ "etyp", [ "tyco"] ]
 	],
 	// Boxes effectively created
@@ -2826,6 +2827,20 @@ BoxParser.createFullBoxCtor("ccst", function(stream) {
 	this.intra_pred_used = ((flags & 0x40) == 0x40);
 	this.max_ref_per_pic = ((flags & 0x3f) >> 2);
 	stream.readUint24();
+});
+
+// file:src/parsing/cdef.js
+BoxParser.createBoxCtor("cdef", function(stream) {
+    var i;
+    this.channel_count = stream.readUint16();
+    this.channel_indexes = [];
+    this.channel_types = [];
+    this.channel_associations = [];
+    for (i = 0; i < this.channel_count; i++) {
+        this.channel_indexes.push(stream.readUint16());
+        this.channel_types.push(stream.readUint16());
+        this.channel_associations.push(stream.readUint16());
+    }
 });
 
 // file:src/parsing/clap.js
