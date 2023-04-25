@@ -2859,7 +2859,46 @@ BoxParser.createBoxCtor("clli", function(stream) {
     this.max_pic_average_light_level = stream.readUint16();
 });
 
-// file:src/parsing/cmpd.js
+// file:src/parsing/cmex.js
+BoxParser.createFullBoxCtor("cmex", function(stream) {
+	if (this.flags & 0x1) {
+		this.pos_x = stream.readInt32();
+	}
+	if (this.flags & 0x2) {
+		this.pos_y = stream.readInt32();
+	}
+	if (this.flags & 0x4) {
+		this.pos_z = stream.readInt32();
+	}
+	if (this.flags & 0x8) {
+		if (this.version == 0) {
+			if (this.flags & 0x10) {
+				this.quat_x = stream.readInt32();
+				this.quat_y = stream.readInt32();
+				this.quat_z = stream.readInt32();
+			} else {
+				this.quat_x = stream.readInt16();
+				this.quat_y = stream.readInt16();
+				this.quat_z = stream.readInt16();
+			}
+		} else if (this.version == 1) {
+			//ViewpointGlobalCoordinateSysRotationStruct rot;
+		}
+	}
+	if (this.flags & 0x20) {
+		this.id = stream.readUint32();
+	}
+});
+// file:src/parsing/cmin.js
+BoxParser.createFullBoxCtor("cmin", function(stream) {
+	this.focal_length_x = stream.readInt32();
+	this.principal_point_x = stream.readInt32();
+	this.principal_point_y = stream.readInt32();
+	if (this.flags & 0x1) {
+		this.focal_length_y = stream.readInt32();
+		this.skew_factor = stream.readInt32();
+	}
+});// file:src/parsing/cmpd.js
 BoxParser.createBoxCtor("cmpd", function(stream) {
 	this.component_count = stream.readUint16();
 	this.component_types = [];
