@@ -3212,6 +3212,8 @@ BoxParser.createEntityToGroupCtor("tsyn");
 // White balance bracketing (ISO/IEC 23008-12:2022 Section 6.8.6.3.1)
 BoxParser.createEntityToGroupCtor("wbbr");
 
+// Alternative entity (ISO/IEC 23008-12:2022 AMD1 Section 6.8.10)
+BoxParser.createEntityToGroupCtor("prgr");
 // file:src/parsing/esds.js
 BoxParser.createFullBoxCtor("esds", function(stream) {
 	var esd_data = stream.readUint8Array(this.size-this.hdr_size);
@@ -3730,7 +3732,16 @@ BoxParser.createBoxCtor("pmax", function(stream) {
 	this.bytes = stream.readUint32();
 });
 
-// file:src/parsing/prft.js
+// file:src/parsing/prdi.js
+BoxParser.createFullBoxCtor("prdi", function(stream) {
+	this.step_count = stream.readUint16();
+	this.item_count = [];
+	if (this.flags & 0x2) {
+		for (var i = 0; i < this.step_count; i++) {
+			this.item_count[i] = stream.readUint16();
+		}
+	}
+});// file:src/parsing/prft.js
 BoxParser.createFullBoxCtor("prft", function(stream) {
 	this.ref_track_id = stream.readUint32();
 	this.ntp_timestamp = stream.readUint64();
