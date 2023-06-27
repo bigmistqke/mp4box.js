@@ -3680,6 +3680,11 @@ BoxParser.createFullBoxCtor("mfro", function(stream) {
 	this._size = stream.readUint32();
 });
 
+// file:src/parsing/mskC.js
+BoxParser.createFullBoxCtor("mskC", function(stream) {
+    this.bits_per_pixel = stream.readUint8();
+});
+
 // file:src/parsing/mvhd.js
 BoxParser.createFullBoxCtor("mvhd", function(stream) {
 	if (this.version == 1) {
