@@ -3399,7 +3399,7 @@ BoxParser.createFullBoxCtor("iloc", function(stream) {
 		if (this.version < 2) {
 			item.item_ID = stream.readUint16();
 		} else if (this.version === 2) {
-			item.item_ID = stream.readUint16();
+			item.item_ID = stream.readUint32();
 		} else {
 			throw "version of iloc box not supported";
 		}
