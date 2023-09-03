@@ -2130,6 +2130,8 @@ var MPEG4DescriptorParser = function () {
 	classes.DecoderConfigDescriptor.prototype.parse = function(stream) {
 		this.oti = stream.readUint8();
 		this.streamType = stream.readUint8();
+		this.upStream = ((this.streamType >> 1) & 1) !== 0;
+		this.streamType = this.streamType >>> 2;
 		this.bufferSize = stream.readUint24();
 		this.maxBitrate = stream.readUint32();
 		this.avgBitrate = stream.readUint32();
@@ -2152,7 +2154,8 @@ var MPEG4DescriptorParser = function () {
 
 if (typeof exports !== 'undefined') {
 	exports.MPEG4DescriptorParser = MPEG4DescriptorParser;
-}// file:src/box.js
+}
+// file:src/box.js
 /*
  * Copyright (c) 2012-2013. Telecom ParisTech/TSI/MM/GPAC Cyril Concolato
  * License: BSD-3-Clause (see LICENSE file)
