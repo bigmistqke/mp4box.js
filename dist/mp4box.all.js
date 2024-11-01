@@ -3889,7 +3889,7 @@ BoxParser.createBoxCtor("rtp ", function(stream) {
 // file:src/parsing/saio.js
 BoxParser.createFullBoxCtor("saio", function(stream) {
 	if (this.flags & 0x1) {
-		this.aux_info_type = stream.readUint32();
+		this.aux_info_type = stream.readString(4);
 		this.aux_info_type_parameter = stream.readUint32();
 	}
 	var count = stream.readUint32();
@@ -3905,7 +3905,7 @@ BoxParser.createFullBoxCtor("saio", function(stream) {
 // file:src/parsing/saiz.js
 BoxParser.createFullBoxCtor("saiz", function(stream) {
 	if (this.flags & 0x1) {
-		this.aux_info_type = stream.readUint32();
+		this.aux_info_type = stream.readString(4);
 		this.aux_info_type_parameter = stream.readUint32();
 	}
 	this.default_sample_info_size = stream.readUint8();
