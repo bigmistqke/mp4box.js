@@ -6554,6 +6554,10 @@ var ISOFile = function (stream) {
 	this.nextMoofNumber = 0;
 	/* Boolean indicating if the initial list of items has been produced */
 	this.itemListBuilt = false;
+	/* Array of items */
+	this.items = [];
+	/* Array of entity groups */
+	this.entity_groups = [];
 	/* Callback called when the sidx box is entirely parsed */
 	this.onSidx = null;
 	/* Boolean keeping track of the call to onSidx, to avoid double calls */
@@ -8183,8 +8187,6 @@ ISOFile.prototype.getTrackById = function(id) {
 	return null;
 }
 // file:src/isofile-item-processing.js
-ISOFile.prototype.items = [];
-ISOFile.prototype.entity_groups = [];
 /* size of the buffers allocated for samples */
 ISOFile.prototype.itemsDataSize = 0;
 
