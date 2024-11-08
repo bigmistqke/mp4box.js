@@ -2786,6 +2786,25 @@ BoxParser.createBoxCtor("av1C", function(stream) {
 });
 
 // file:src/parsing/avcC.js
+function printPS(ps) {
+	var str = "<table class='inner-table'>";
+	str += "<thead><tr><th>length</th><th>nalu_data</th></tr></thead>";
+	str += "<tbody>";
+
+	for (var i=0; i < ps.length; i++) {
+		var nalu = ps[i];
+		str += "<tr>";
+		str += "<td>"+nalu.length+"</td>";
+		str += "<td>";
+		str += nalu.nalu.reduce(function(str, byte) {
+			return str + byte.toString(16).padStart(2, "0");
+		}, "0x");
+		str += "</td></tr>";
+	}
+	str += "</tbody></table>";
+	return str;
+}
+
 BoxParser.createBoxCtor("avcC", function(stream) {
 	var i;
 	var toparse;
@@ -2797,6 +2816,9 @@ BoxParser.createBoxCtor("avcC", function(stream) {
 	this.nb_SPS_nalus = (stream.readUint8() & 0x1F);
 	toparse = this.size - this.hdr_size - 6;
 	this.SPS = [];
+	this.SPS.toString = function () {
+		return printPS(this);
+	}
 	for (i = 0; i < this.nb_SPS_nalus; i++) {
 		this.SPS[i] = {};
 		this.SPS[i].length = stream.readUint16();
@@ -2806,6 +2828,9 @@ BoxParser.createBoxCtor("avcC", function(stream) {
 	this.nb_PPS_nalus = stream.readUint8();
 	toparse--;
 	this.PPS = [];
+	this.PPS.toString = function () {
+		return printPS(this);
+	}
 	for (i = 0; i < this.nb_PPS_nalus; i++) {
 		this.PPS[i] = {};
 		this.PPS[i].length = stream.readUint16();
@@ -3352,6 +3377,29 @@ BoxParser.createBoxCtor("hvcC", function(stream) {
 	this.lengthSizeMinusOne = (tmp_byte & 0X3);
 
 	this.nalu_arrays = [];
+	this.nalu_arrays.toString = function () {
+		var str = "<table class='inner-table'>";
+		str += "<thead><tr><th>completeness</th><th>nalu_type</th><th>nalu_data</th></tr></thead>";
+		str += "<tbody>";
+
+		for (var i=0; i<this.length; i++) {
+			var nalu_array = this[i];
+			str += "<tr>";
+			str += "<td rowspan='"+nalu_array.length+"'>"+nalu_array.completeness+"</td>";
+			str += "<td rowspan='"+nalu_array.length+"'>"+nalu_array.nalu_type+"</td>";
+			for (var j=0; j<nalu_array.length; j++) {
+				var nalu = nalu_array[j];
+				if (j !== 0) str += "<tr>";
+				str += "<td>";
+				str += nalu.data.reduce(function(str, byte) {
+					return str + byte.toString(16).padStart(2, "0");
+				}, "0x");
+				str += "</td></tr>";
+			}
+		}
+		str += "</tbody></table>";
+		return str;
+	}
 	var numOfArrays = stream.readUint8();
 	for (i = 0; i < numOfArrays; i++) {
 		var nalu_array = [];
